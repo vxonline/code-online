@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Code Editor</title>
+<style>
+  body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .container {
+    position: relative;
+    width: 80%;
+    max-width: 800px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #editor {
+    width: calc(100% - 20px);
+    height: 40vh;
+    border: 2px solid #2980b9;
+    border-radius: 10px;
+    padding: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 20px;
+    resize: none;
+    position: relative;
+  }
+  #output {
+    width: calc(100% - 20px);
+    height: 20vh;
+    border: 2px solid #2980b9;
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background-color: #f8f8f8;
+  }
+  button {
+    background-color: #2980b9;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #1f618d;
+  }
+  footer {
+    margin-top: 20px;
+    color: #777;
+    text-align: center;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <textarea id="editor">// Write your code here...</textarea>
+    <button onclick="addHTMLTemplate()">Add HTML Template</button>
+    <button onclick="insertTag('<div>', '</div>')">Div</button>
+    <button onclick="insertTag('<p>', '</p>')">Paragraph</button>
+    <button onclick="insertTag('<h1>', '</h1>')">Heading</button>
+    <button onclick="insertTag('<a href=\"#\">', '</a>')">Link</button>
+    <button onclick="runCode()">Run Code</button>
+    <div id="output"></div>
+    <a href="https://www.youtube.com/channel/UCfoxaEyXFD1Nm7LIUrc5bIg" target="_blank" class="youtube-logo"><img src="2673795.png"></a>
+  </div>
+  <script>
+    function insertTag(opening, closing) {
+      var editor = document.getElementById("editor");
+      var startPos = editor.selectionStart;
+      var endPos = editor.selectionEnd;
+      editor.value = editor.value.substring(0, startPos) + opening + editor.value.substring(startPos, endPos) + closing + editor.value.substring(endPos);
+      editor.focus();
+      editor.setSelectionRange(startPos + opening.length, startPos + opening.length);
+    }
+
+    function addHTMLTemplate() {
+      var template = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+      `;
+      document.getElementById("editor").value = template;
+    }
+
+    function runCode() {
+      var code = document.getElementById("editor").value;
+      var outputDiv = document.getElementById("output");
+      try {
+        outputDiv.innerHTML = "";
+        var iframe = document.createElement("iframe");
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        outputDiv.appendChild(iframe);
+        var iframeDoc = iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(code);
+        iframeDoc.close();
+      } catch (error) {
+        outputDiv.textContent = error;
+      }
+    }
+  </script>
+</body>
+</html>
